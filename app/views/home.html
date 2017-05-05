@@ -1,0 +1,11 @@
+<h1 class="heading -large">Stria Quiz</h1>
+
+<h3 class="heading -medium"><span class="number-example">{{home.quiz.steps[home.currentStep-1].question}}</span></h3>
+
+Selected Answer: {{home.selectedAnswer}}
+<ul>
+<li ng-repeat="answer in home.quiz.steps[home.currentStep-1].answers"><a href="#" ng-click="home.selectAnswer($index)">{{answer}}</a></li>
+</ul>
+
+<button ng-click="home.prev()">Prev</button>
+<button ng-click="home.next()">Next</button>
