@@ -1,4 +1,4 @@
-angularjs-gulp-browserify-boilerplate
+The Stria Quiz
 =====================================
 A quiz for the stria swim website.
 
