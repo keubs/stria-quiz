@@ -1,20 +1,18 @@
 // @ngInject
 
-function QuizCtrl() {
+function QuizCtrl($http, QuizService) {
 	const vm = this;
-	vm.currentStep = 1;
+	const apiHost = 'http://local.stria.com';
+	// vm.quiz.current = 0;
 	vm.quiz = {
+		current: 0,
 		steps : [
 			{
 				number : 1,
 				question: 'What is your boob shape?',
 				answers : [
-					'On the Edge',
-					'Round + Full',
-					'Bottom + Full',
-					'Bottom + On the Edge',
 				],
-				selectedAnswer : 0
+				selectedAnswer : null
 			},
 			{
 				number : 2,
@@ -26,24 +24,57 @@ function QuizCtrl() {
 					4,
 					5,
 				],
-				selectedAnswer: 0
+				selectedAnswer: null
 			},
 
-		]
-	}
+		],
+		results: []
+	};
+
+	vm.init = function() {
+	    $http.defaults.headers.common.Authorization = 'Basic YWRtaW46dGVzdGVyMQ==';
+
+		$http.get(apiHost + '/wp-json/wc/v2/products/attributes/5/terms')
+			.then(function(response) {
+				vm.quiz.steps[0].answers = response.data;
+			})
+			.catch(function(error){
+				console.log(error);
+			});
+
+		$http.get(apiHost + '/wp-json/wc/v2/products/attributes/6/terms')
+			.then(function(response) {
+				vm.quiz.steps[1].answers = response.data;
+			})
+			.catch(function(error){
+				console.log(error);
+			});
+
+		$http.get(apiHost + '/wp-json/wc/v2/products')
+			.then(function(response) {
+				vm.products = response.data;
+			})
+			.catch(function(error){
+				console.log(error);
+			});
+	};
 
   	vm.next = function() {
-  		vm.currentStep +=1;
-  	}
+  		vm.quiz.current +=1;
+  	};
 
   	vm.prev = function() {
-  		vm.currentStep -=1;
-  	}
+  		vm.quiz.current -=1;
+  	};
 
-  	vm.selectAnswer = function(index) {
-  		vm.quiz.steps[vm.currentStep-1].selectedAnswer = index;
-  		vm.selectedAnswer = vm.quiz.steps[vm.currentStep-1].answers[index];
-  		console.log(vm.quiz.steps[vm.currentStep-1].answers[index]);
+  	vm.selectAnswer = function(answer) {
+  		console.log(answer);
+		vm.quiz.steps[vm.quiz.current].selectedAnswer = answer;
+  	};
+
+  	vm.finish = function() {
+  		console.log(vm.quiz.steps[0].selectedAnswer, vm.quiz.steps[1].selectedAnswer);
+  		vm.quiz.results = QuizService.topQuiz(vm.quiz.steps[0].selectedAnswer, parseInt(vm.quiz.steps[1].selectedAnswer));
   	}
 };
 

@@ -18,7 +18,7 @@ function ExampleCtrl($http) {
       console.log( response.data )
       $http.defaults.headers.common.Authorization = 'Basic YWRtaW46dGVzdGVyMQ==';
 
-      $http.get(apiHost + '/wp-json/wc/v1/products')
+      $http.get(apiHost + '/wp-json/wc/v1/products/attributes/6/terms')
       	.then(function(response) {
       		console.log(response);
       	})
