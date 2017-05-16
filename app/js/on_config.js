@@ -12,13 +12,13 @@ function OnConfig($stateProvider, $locationProvider, $urlRouterProvider, $compil
 
   $stateProvider
   .state('Home', {
-    url: '/',
+    url: '/quiz',
     controller: 'QuizCtrl as home',
     templateUrl: 'home.html',
     title: 'Home'
   });
 
-  $urlRouterProvider.otherwise('/');
+  $urlRouterProvider.otherwise('/quiz');
 
 }
 

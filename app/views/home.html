@@ -1,21 +1,72 @@
-<div ng-init="home.init()">
-	<h1 class="heading -large">Stria Quiz</h1>
-	<pre style="max-height: 300px; overflow: auto; width: 300px; display: inline-block;">
-		{{home.quiz | json}}
-	</pre>
-	<pre style="max-height: 300px; overflow: auto; width: 300px; display: inline-block;">
-		{{home.products | json}}
-	</pre>
-	<h3 class="heading -medium"><span class="number-example">{{home.quiz.steps[home.quiz.current].question}}</span></h3>
-	Selected Answer: {{home.selectedAnswer}}
-	<ul>
-	<li ng-repeat="answer in home.quiz.steps[home.quiz.current].answers"><a href="#" ng-click="home.selectAnswer(answer.slug)">{{answer.name}}</a></li>
-	</ul>
+<div class="quiz" ng-init="home.init()">
+	<div class="question-{{home.quiz.tops.current+1}}">
+		<h2 ng-class="{'hidden' : home.quiz.tops.loaded != true}" class="heading -medium question" ng-bind-html="home.quiz.tops.steps[home.quiz.tops.current].question"></h2>
+		<!-- Selected Answer: {{home.quiz.tops.steps[home.quiz.tops.current].selectedAnswer}} -->
+		<span ng-class="{'hidden' : home.quiz.tops.loaded == true}">Loading...</span>
+		<div class="answers" ng-class="{'bordered' : home.quiz.tops.steps[home.quiz.tops.current].border_questions && home.quiz.tops.finished !== true}">
+			<div ng-class="{'hidden' : home.quiz.tops.finished === true}" ng-repeat="border in home.quiz.tops.steps[home.quiz.tops.current].border_questions" class="label {{$index}}" ng-bind-html="border">
+			</div>
+			<ul ng-class="{'hidden' : home.quiz.tops.finished == true }">
+				<li class="answer" ng-repeat="answer in home.quiz.tops.steps[home.quiz.tops.current].answers" style="width: {{(100 / home.quiz.tops.steps[home.quiz.tops.current].answers.length) - 2}}%">
+					<!-- <pre style="width: 100%; text-align: left">{{answer | json}}</pre> -->
+					<a href="#" ng-click="home.selectAnswer('tops', answer.slug, $index)">
+						<img ng-class="{'selected' : answer.selected == true}" src="images/quiz-0{{home.quiz.tops.current+1}}_0{{$index+1}}.jpg" />
+					</a>
+					<div>
+						<a href="#" ng-click="home.selectAnswer('tops', answer.slug)">{{answer.name}}</a>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="nextprev" ng-class="{'hidden' : home.quiz.tops.loaded === false || home.quiz.tops.finished === true}">
+			<!-- <button ng-click="home.prev('tops')">Prev</button>
+			<button ng-class="[{'hidden': home.quiz.tops.current == 1}]" ng-click="home.next('tops')">Next</button> -->
+			<!-- <button ng-class="{'hidden': home.quiz.tops.current < 1}" ng-click="home.finish('tops')">Finish</button> -->
+		</div>
+		<ul class="results">
+			<li ng-repeat="result in home.quiz.tops.displayResults">
+				<a href="{{result.permalink}}" target="_blank"><img src="{{result.images[0].src}}" />
+				</a>
+				<a href="{{result.permalink}}">
+					<p>{{result.name}}</p>
+				</a>
+			</li>
+		</ul>
+	</div>
+	<hr />
+	<div class="question-{{home.quiz.bottoms.current+1}}">
+		<h2 ng-class="{'hidden' : home.quiz.bottoms.loaded != true}" class="heading -medium question" ng-bind-html="home.quiz.bottoms.steps[home.quiz.bottoms.current].question"></h2>
+		<!-- Selected Answer: {{home.quiz.tops.steps[home.quiz.tops.current].selectedAnswer}} -->
+		<span ng-class="{'hidden' : home.quiz.bottoms.loaded == true}">Loading...</span>
+		<div class="answers" ng-class="{'bordered' : home.quiz.bottoms.steps[home.quiz.bottoms.current].border_questions && home.quiz.bottoms.finished !== true}">
+			<div ng-class="{'hidden' : home.quiz.bottoms.finished === true}" ng-repeat="border in home.quiz.bottoms.steps[home.quiz.bottoms.current].border_questions" class="label {{$index}}" ng-bind-html="border">
+			</div>
 
-	<button ng-click="home.prev()">Prev</button>
-	<button ng-class="{'hidden': home.quiz.current == 1}"ng-click="home.next()">Next</button>
-	<button ng-class="{'hidden': home.quiz.current < 1}" ng-click="home.finish()">Finish</button>
-	<ul>
-	<li ng-repeat="result in home.quiz.results">{{result}}</li>
-	</ul>
+			<ul ng-class="{'hidden' : home.quiz.bottoms.finished == true }">
+				<li class="answer" ng-repeat="answer in home.quiz.bottoms.steps[home.quiz.bottoms.current].answers" style="width: {{(100 / home.quiz.bottoms.steps[home.quiz.bottoms.current].answers.length) - 2}}%">
+					<!-- <pre style="width: 100%; text-align: left">{{answer | json}}</pre> -->
+					<a href="#" ng-click="home.selectAnswer('bottoms', answer.slug, $index)">
+						<img ng-class="{'selected' : answer.selected == true}" src="images/quiz-bottoms-0{{home.quiz.bottoms.current+1}}_0{{$index+1}}.jpg" />
+					</a>
+					<div>
+						<a href="#" ng-click="home.selectAnswer('bottoms', answer.slug)">{{answer.name}}</a>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="nextprev" ng-class="{'hidden' : home.quiz.bottoms.loaded === false || home.quiz.bottoms.finished === true}">
+			<!-- <button ng-click="home.prev('bottoms')">Prev</button> -->
+			<!-- <button ng-class="[{'hidden': home.quiz.bottoms.current == 3}]" ng-click="home.next('bottoms')">Next</button> -->
+			<!-- <button ng-class="{'hidden': home.quiz.bottoms.current < 3}" ng-click="home.finish('bottoms')">Finish</button> -->
+		</div>
+		<ul class="results">
+			<li ng-repeat="result in home.quiz.bottoms.displayResults">
+				<a href="{{result.permalink}}" target="_blank"><img src="{{result.images[0].src}}" />
+				</a>
+				<a href="{{result.permalink}}">
+					<p>{{result.name}}</p>
+				</a>
+			</li>
+		</ul>
+	</div>
 </div>
